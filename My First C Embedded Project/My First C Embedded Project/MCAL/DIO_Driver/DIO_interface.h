@@ -16,14 +16,14 @@ typedef enum port{
 	PORT_D
 	} PORT_t;
 typedef enum pin {
-	PIN0,
-	PIN1,
-	PIN2,
-	PIN3,
-	PIN4,
-	PIN5,
-	PIN6,
-	PIN7
+	DIO_PIN0,
+	DIO_PIN1,
+	DIO_PIN2,
+	DIO_PIN3,
+	DIO_PIN4,
+	DIO_PIN5,
+	DIO_PIN6,
+	DIO_PIN7
 	} PIN_t;
 	
 typedef enum dir{
