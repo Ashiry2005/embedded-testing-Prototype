@@ -5,8 +5,10 @@
  *  Author: Ahmed El Ashiry
  */ 
 #include "DIO_interface.h"
+#include "DIO_private.h"
 #include "../../Library/Std.h"
 #include "../../Library/Macros.h"
+
 
 static volatile uint8* getDDR(PORT_t port) {
 	switch (port) {
