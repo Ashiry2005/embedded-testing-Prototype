@@ -51,7 +51,7 @@ void LCD_senddata(uint8 data) {
      LCD_sendcommand(0x28);    // 4-bit, 2 lines
      LCD_sendcommand(0x0C);    // display ON, cursor OFF
      LCD_sendcommand(0x01);    // clear display
-     _delay_ms(3);
+     _delay_ms(2);
  }
 void LCD_createchar(uint8 location, uint8*pattern){
 	uint8 i;
@@ -84,3 +84,4 @@ void LCD_sendstring(const uint8 *str)
 		}
 		LCD_sendcommand(lcdMemory | LCD_SET_CURSOR_LOCATION);
 	}	
+
