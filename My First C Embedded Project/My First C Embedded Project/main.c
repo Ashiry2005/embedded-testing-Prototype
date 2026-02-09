@@ -1,18 +1,37 @@
-/*
- * My First C Embedded Project.c
- *
- * Created: 2/6/2026 6:24:09 PM
- * Author : Ahmed El Ashiry
- */ 
+#define F_CPU 8000000ul
 
-#include <avr/io.h>
+#include "HAL/lcd.h"
 
+#define LED_PORT PORT_A
+#define LED_PIN DIO_PIN0
+#define SW_PORT PORT_C
+#define SW_PIN DIO_PIN0
 
 int main(void)
 {
-    /* Replace with your application code */
-    while (1) 
-    {
-    }
-}
+	SetPinDir(LED_PORT, LED_PIN, OUTPUT);
+	SetPinDir(SW_PORT, SW_PIN, INPUT);
 
+	SetPinVal(LED_PORT, LED_PIN, VAL_LOW);
+	SetPinVal(SW_PORT, SW_PIN, VAL_HIGH);  
+
+	LCD_init();
+
+	while(1)
+	{
+		if (ReadPinVal(SW_PORT, SW_PIN) == 0)    
+		{
+			SetPinVal(LED_PORT, LED_PIN, VAL_HIGH);
+
+			LCD_sendcommand(LCD_CLEAR_COMMAND);
+			LCD_moveCursor(0,0);
+			LCD_sendstring((uint8*)"BUTTON ON");
+		}
+		else  
+		{
+			SetPinVal(LED_PORT, LED_PIN, VAL_LOW);
+
+			LCD_sendcommand(LCD_CLEAR_COMMAND);
+		}
+	}
+}
