@@ -1,37 +1,50 @@
-#define F_CPU 8000000ul
-
+#define F_CPU 8000000UL
+#include <avr/io.h>
+#include <util/delay.h>
 #include "HAL/lcd.h"
-
-#define LED_PORT PORT_A
-#define LED_PIN DIO_PIN0
-#define SW_PORT PORT_C
-#define SW_PIN DIO_PIN0
-
+#include "HAL/pad.h"
+#include <math.h>
 int main(void)
 {
-	SetPinDir(LED_PORT, LED_PIN, OUTPUT);
-	SetPinDir(SW_PORT, SW_PIN, INPUT);
+	uint8 key;
+	uint8 curRow = 0;
+	uint8 curCol = 0;
+	uint8 str[2];
 
-	SetPinVal(LED_PORT, LED_PIN, VAL_LOW);
-	SetPinVal(SW_PORT, SW_PIN, VAL_HIGH);  
-
+	keypad_init();
 	LCD_init();
+	LCD_sendcommand(LCD_CLEAR_COMMAND);
 
 	while(1)
 	{
-		if (ReadPinVal(SW_PORT, SW_PIN) == 0)    
-		{
-			SetPinVal(LED_PORT, LED_PIN, VAL_HIGH);
+		key = pressed_key();
 
-			LCD_sendcommand(LCD_CLEAR_COMMAND);
-			LCD_moveCursor(0,0);
-			LCD_sendstring((uint8*)"BUTTON ON");
-		}
-		else  
+		if(key != 0xFF)
 		{
-			SetPinVal(LED_PORT, LED_PIN, VAL_LOW);
+			str[0] = key;
+			str[1] = '\0';
 
-			LCD_sendcommand(LCD_CLEAR_COMMAND);
+			if(key == 'x')
+			{
+				if(curCol > 0) curCol--;
+				LCD_moveCursor(curRow, curCol);
+				str[0] = ' ';
+				LCD_sendstring(str);
+				LCD_moveCursor(curRow, curCol);
+			}
+			else
+			{
+				LCD_sendstring(str);
+				curCol++;
+				if(curCol > 15)
+				{
+					curCol = 0;
+					curRow = (curRow == 0) ? 1 : 0;
+					LCD_moveCursor(curRow, curCol);
+				}
+			}
+
+			_delay_ms(50);
 		}
 	}
 }
